@@ -8,8 +8,15 @@ const morgan = require("morgan");
 const port = process.env.PORT;
 const host = process.env.HOST;
 
-//loading the data
+// main app 
 const app = express();
+
+//sub-app routers
+const userRouter = express.Router()
+const tourRouter = express.Router()
+
+
+//loading the data
 const tours = JSON.parse(fs.readFileSync("./data/tours-simple.json", "utf-8"));
 const Users = JSON.parse(fs.readFileSync('./data/users.json', 'utf-8'))
 
@@ -104,41 +111,25 @@ const UpateUser = (req, res) => {
   res.status(200).send("ok");
 };
 
-//router 
-
-const tourRouter = express.Router();
-const userRouter = express.Router();
 
 
+tourRouter.route("/").get(getalltours).post(addnewtour);
 
-app.get("/").get(home);
-// tour routes 
-
-
-tourRouter("/").get(getalltours).post(addnewtour);
-
-tourRouter('/:id')
+tourRouter.route('/:id')
   .get(gettourbyid)
   .patch(modifytour)
   .delete(deletetour);
 
-
-
-
-
 //user routes
-userRouter("/").get(GetUsers);
+userRouter.route("/").get(GetUsers);
 
-userRouter("/:id").get(GetUserById).patch(UpateUser).delete(DeleteUser)
+userRouter.route("/:id").get(GetUserById).patch(UpateUser).delete(DeleteUser)
 
 
-// this line mounts the tourRouter, which handles all the routes for the
-// tours resource, at the path /api/v1/tours. This means that all the routes
-// defined in the tourRouter will have the prefix /api/v1/tours, for example
-// the route tourRouter("/").get(getalltours) will be accessible at
-// /api/v1/tours/ and tourRouter('/:id').get(gettourbyid) will be accessible
-// at /api/v1/tours/:id, and so on.
-app.use("/api/v1/users" , userRouter) //a way to create a prefix for the routes in the router so we dont have to write /api/v1/tours everywhere
+
+//mounting the routers
+app.use("/api/v1/tour", tourRouter)
+app.use("/api/v1/users" , userRouter)
 
 //listening to the port
 app.listen(port, () => {
