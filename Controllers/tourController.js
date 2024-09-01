@@ -2,16 +2,46 @@
 const fs = require("fs");
 const tours = JSON.parse(fs.readFileSync("./data/tours-simple.json", "utf-8"));
 
+exports.checkID = ((req , res , next , val)=>{
 
+  if(val * 1 > tours.length ) {
+      return res.status(404).json({
+          status :" fail" ,
+          message : "invalid ID"
+
+
+      })
+
+  }else{
+
+  next()
+  }
+})
+
+exports.checkBody = (req , res , next) =>{
+
+  const body = req.body ; 
+  if('name' in body && "price" in body){
+    console.log('valid body')
+    next()
+}else{
+  console.log("INVALID REQUEST")
+ return res.status(404).json({
+  status : "failed",
+  reason : "INVALID BODY"
+
+ })
+}
+}
 
 exports.getalltours = (req, res) => {
     if (!tours) {
-      res.status(500).json({
+      return res.status(500).json({
         status: "Internal server error",
         data: null,
       });
     } else {
-      res.status(200).json({
+     return res.status(200).json({
         status: "sucess",
         requestedAT: requesttime,
         data: {
@@ -42,14 +72,10 @@ exports.modifytour = (req, res) => {
   };
   
 exports.gettourbyid = (req, res) => {
-    const paramsid = req.params.id;
-  
-    if (paramsid > tours.length) {
-      res.json({ status: "Failed", reason: "overflow" });
-    } else {
-      console.log(paramsid);
+      console.log("in gettourbyid function")
+      const paramsid = req.params.id
       res.json({ status: "success", ...tours[paramsid] });
-    }
+    
   };
   
   exports.deletetour = (req, res) => {

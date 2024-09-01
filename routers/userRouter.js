@@ -1,4 +1,4 @@
-const express = require("express" , console.log("required"))
+const express = require("express")
 const Router = express.Router()
 const userController = require("../Controllers/userController.js")
 

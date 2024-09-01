@@ -3,9 +3,14 @@ const Router = express.Router()
 const tourController = require("../Controllers/tourController.js")
 
 
-Router.route("/")
+//ID checking middleware
+Router.param("id" , tourController.checkID)
+
+
+
+Router.route("/") 
 .get(tourController.getalltours)
-.post(tourController.addnewtour);
+.post(tourController.checkBody , tourController.addnewtour); //chaining middlewares is easy omg?
 
 Router.route("/:id")
 .get(tourController.gettourbyid)
