@@ -21,7 +21,7 @@ exports.checkID = ((req , res , next , val)=>{
 exports.checkBody = (req , res , next) =>{
 
   const body = req.body ; 
-  if('name' in body && "price" in body){
+  if('name' in body && req.body.price){
     console.log('valid body')
     next()
 }else{
@@ -55,7 +55,6 @@ exports.getalltours = (req, res) => {
 
 exports.addnewtour = (req, res) => {
     console.log(req.body);
-    res.send("done");
     const body = req.body;
     const newid = tours[tours.length - 1].id + 1;
     const newtour = { id: newid, ...body }; //same as object.assin lol spread is better btw
@@ -64,7 +63,7 @@ exports.addnewtour = (req, res) => {
   
     fs.writeFile("./data/tours-simple.json", JSON.stringify(tours), () => {
       console.log("written");
-      res.status(201);
+      res.status(201).send(("created"));
     });
   };
 exports.modifytour = (req, res) => {
