@@ -3,4 +3,4 @@
 /img
 /public
 /templates
-./env
+*.env
