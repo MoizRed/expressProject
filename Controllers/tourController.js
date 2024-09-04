@@ -43,7 +43,6 @@ exports.getalltours = (req, res) => {
     } else {
      return res.status(200).json({
         status: "sucess",
-        requestedAT: requesttime,
         data: {
           tours,
         },

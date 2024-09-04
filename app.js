@@ -15,13 +15,12 @@ const productRouter = require("./routers/productRouter");
 //midllewares
 
 app.use(express.json());
-app.use(morgan("dev"));
-app.use((req, res, next) => {
-  requesttime = new Date().toISOString();
-  console.log(requesttime);
-  next();
-});
-app.use(express.static(`${__dirname}/public`));
+if (process.env.NODE_ENV === "development") {
+  app.use(morgan("dev"));
+}
+
+
+app.use(express.static(`./public`));
 
 //routes handlers
 const home = (req, res) => {
