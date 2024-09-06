@@ -31,7 +31,7 @@ const Tourmodel =  mongoose.model("tours" , Tourschema )
 const tour = new Tourmodel({
 
     name : "the jumber humber",
-    price : 9843,
+    price : 98,
     rating : 3
 
 })
