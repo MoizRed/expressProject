@@ -35,19 +35,41 @@ exports.addnewtour = async (req, res) => {
     });
   }
 };
-exports.modifytour = (req, res) => {
-  res.send("patch");
+exports.modifytour = async (req, res) => {
+
+  try{
+  const reqid  = req.params.id;
+  const tour = await Tour.findByIdAndUpdate(reqid, req.body , {
+    new : true
+ 
+  }
+
+
+
+)
+res.json({status : "success" ,
+  changes : tour
+})
+}catch(err){res.json(err)}
+
+
+
+
 };
 
-exports.gettourbyid = (req, res) => {
-  console.log("in gettourbyid function");
-  const paramsid = req.params.id;
-  res.json({ status: "success", ...tours[paramsid] });
+exports.gettourbyid = async (req, res) => {
+  try{
+  const tour =  await Tour.findById(req.params.id)
+  res.json({
+    status : "success",
+    tour : tour
+  })
+}catch(err){res.json({err})}
 };
 
 exports.deletetour = async (req, res) => {
 try{
-  await Tour.deleteOne({_id : req.params.id})
+  await Tour.findByIdAndDelete(req.params.id)
   res.json({
     status : "deleted"
 
