@@ -3,6 +3,30 @@ const Tour = require("../model/tourModel");
 //const tours = JSON.parse(fs.readFileSync("./data/tours-simple.json", "utf-8"));
 
 exports.getalltours = async (req, res) => {
+//build query
+  const queryObj = {...req.query}
+  console.log(queryObj)
+  const excludedfields = ['page' , 'sort' , 'limit' , 'fields'];
+  excludedfields.forEach(el => delete query[el])
+
+
+  const query = Tour.find(queryObj)
+
+  // const questy = tour.find()
+  // .where ('duration')
+  // .equals(5)
+  // .where('difficulty')
+  // .equals("easy")
+
+
+  //EXCUTE QUERY
+  const tour = await query
+res.json({
+  status : "sucess",
+  data : tour
+
+})
+/*
   try{
  const tours = await Tour.find()
   res.json({
@@ -13,9 +37,10 @@ exports.getalltours = async (req, res) => {
 }catch(err){
 
   res.json({
-    err})
+    err}) 
 
 }
+*/
 };
 
 exports.addnewtour = async (req, res) => {
