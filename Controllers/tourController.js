@@ -7,9 +7,9 @@ exports.getalltours = async (req, res) => {
   const queryObj = {...req.query}
   console.log(queryObj)
   const excludedfields = ['page' , 'sort' , 'limit' , 'fields'];
-  excludedfields.forEach(el => delete query[el])
+  excludedfields.forEach(el => delete queryObj[el])
 
-
+ //TODO
   const query = Tour.find(queryObj)
 
   // const questy = tour.find()
