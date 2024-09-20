@@ -6,7 +6,8 @@ const app = require("./app");
 const port = process.env.PORT;
 const host = process.env.HOST;
 console.log(`ENVOIRMENT is ${process.env.NODE_ENV}`);
-
+const local_db = process.env.DB_LOCAL
+const local_store_db = process.env.DB_LOCAL_STORE
 const db = process.env.DB_STRING.replace("<PASSWORD>", process.env.DB_PASSWORD);
 mongoose.connect(db).then((e) => console.log("connected to DataBase"));
 
