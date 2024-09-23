@@ -1,5 +1,6 @@
 const fs = require("fs");
 const Tour = require("../model/tourModel");
+const { error } = require("console");
 //const tours = JSON.parse(fs.readFileSync("./data/tours-simple.json", "utf-8"));
 
 exports.getalltours = async (req, res) => {
@@ -45,10 +46,23 @@ exports.getalltours = async (req, res) => {
 
     }
 
-    //PAGINATION TODO: PAGINATION
-    query = query.skip(2).limit(10)
- 
+    //PAGINATION TODO: PAGINATION TODO
+    const page = req.query.page * 1 || 1
+    const limit = req.query.limit * 1 || 100
+    const skip = (page - 1) * limit
+    query = query.skip(skip).limit(limit) // these two methos are coming from the query string of the mongoose library  
 
+    if(req.query.page){
+
+      const numTours = await Tour.countDocuments();
+       if( skip  >= numTours){
+
+        throw new Error('this page does not exist')
+
+
+       }
+
+    }
 
   //EXCUTE QUERY
   const tour = await query;
