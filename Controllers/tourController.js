@@ -4,12 +4,13 @@ const Tour = require("../model/tourModel");
 
 exports.getalltours = async (req, res) => {
   //build query
+  //1) Filtering
   const queryObj = { ...req.query };
   console.log(queryObj);
   const excludedfields = ["page", "sort", "limit", "fields"];
   excludedfields.forEach((el) => delete queryObj[el]);
 
-  //TODO ADVANCED FILTERING  
+  //2)ADVANCED FILTERING  
   
   let queryStr = JSON.stringify(queryObj)
 
@@ -18,7 +19,36 @@ exports.getalltours = async (req, res) => {
     console.log(JSON.parse(queryStr))
 
 
-  const query = Tour.find(JSON.parse(queryStr));
+  let query = Tour.find(JSON.parse(queryStr));
+
+  
+  //SORTING
+    if(req.query.sort){
+      const sortBy = req.query.sort.split(',').join(" ") //split method splits the string into array of elements ; join gather the elements of array (strings) and turn them into one single string.
+      const sortby = req.query.sort.replace(/,/g , " ") //better method using regular expression 
+      console.log("before " , req.query.sort , "after : " , sortBy , "better" , sortby)
+      
+      query = query.sort(sortby) 
+            
+    }else{
+      query = query.sort()
+    }
+
+    //fields
+    if (req.query.fields) {
+
+      const fields = req.query.fields.replace(/,/g , " ")
+      query = query.select( fields ) //projecting / selecting the key on the object returns the selected objects wow.. damn im impressed 
+      
+    }else{
+      query = query.select('-__v')
+
+    }
+
+    //PAGINATION TODO: PAGINATION
+    query = query.skip(2).limit(10)
+ 
+
 
   //EXCUTE QUERY
   const tour = await query;
