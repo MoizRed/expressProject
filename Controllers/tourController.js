@@ -1,6 +1,6 @@
 const fs = require("fs");
 const Tour = require("../model/tourModel");
-const { error } = require("console");
+
 //const tours = JSON.parse(fs.readFileSync("./data/tours-simple.json", "utf-8"));
 
 exports.getalltours = async (req, res) => {
@@ -127,5 +127,4 @@ exports.deletetour = async (req, res) => {
     res.send(err);
   }
 };
-
 
